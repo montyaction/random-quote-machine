@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <title>Random Quote Machine</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+        @import url('https://fonts.googleapis.com/css?family=Raleway:400,500');
+
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            vertical-align: baseline;
+        }
+        body {
+            background-color: #333;
+            color: #333;
+            transition: background-color 2s ease-out;
+            font-family: 'Raleway', system-ui, sans-serif;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        
+        div {
+            position: relative;
+            z-index: 2;
+        }
+
+        #quote-box {
+            position: relative;
+            background-color: #fff;
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 40px 50px;
+            text-align: center;
+            max-width: 450px;
+        }
+
+        #quote-box .quote-text {
+            width: 450px;
+            height: auto;
+            clear: both;
+            font-weight: 500;
+            font-size: 1.75em;
+        }
+
+        #quote-box .quote-text i {
+            font-size: 1em;
+            margin-right: 0.4em;
+        }
+
+        #quote-box .quote-author {
+            max-width: 450px;
+            height: auto;
+            clear: both;
+            padding: 20px 0;
+            font-size: 1em;
+            text-align: right;
+        }
+
+        .buttons {
+            display: block;
+            max-width: 450px;
+            margin: auto;
+        }
+
+        .button {
+            height: 38px;
+            background-color: #333;
+            color: #fff;
+            padding: 8px 18px 6px 18px;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+            font-size: 0.85em;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+            outline: none;
+            opacity: 1;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .button:nth-child(1) {
+            margin-right: 5px;
+        }
+
+        #tweet-quote,  #tumblr-quote {
+            float: left;
+            height: 30px;
+            width: 40px;
+            font-size: 1.2em;
+            text-align: center;
+            padding: 0px;
+            padding-top: 10px;
+        }
+
+        #new-quote {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div id="quote-box">
+        <div class="quote-text">
+            <i class="fa fa-quote-left"></i> <span id="text"></span>
+        </div>
+        <div class="quote-author">
+            - <span id="author"></span>
+        </div>
+        <div class="buttons">
+            <a class="button" id="tweet-quote" title="Tweet this quote!" target="_top">
+                    <i class="fa fa-twitter"></i>
+            </a>
+            <a class="button" id="tumblr-quote" title="Post this quote on tumblr!" target="_blank">
+                    <i class="fa fa-tumblr"></i>
+            </a>
+            <button class="button" id="new-quote"><b>New Quote</b></button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const boxElement = document.getElementById('quote-box');
+            const quoteElement = document.getElementById('text');
+            const authorElement = document.getElementById('author');
+            const tweetQuoteLink = document.getElementById('tweet-quote');
+            const tumblrQuoteLink = document.getElementById('tumblr-quote');
+            const newQuoteButton = document.getElementById('new-quote');
+
+            let quote = '';
+            let author = '';
+
+            document.addEventListener('DOMContentLoaded', fetchQuote);
+
+            // Fetch a new quote and update the interface
+            async function fetchQuote() {
+                try {
+                    const response = await fetch('https://api.quotable.io/random');
+                    const data = await response.json();
+                    setQuoteAndAuthor(data.content, data.author);
+                } catch (error) {
+                    console.log("Error fetching quote: ", error);
+                }
+            }
+            
+            // 
+            function setQuoteAndAuthor(newQuote, newAuthor) {
+                quote = newQuote;
+                author = newAuthor;
+                quoteElement.textContent = quote;
+                authorElement.textContent = author;
+            }
+
+            // Function to generate a random color
+            function getRandomColor() {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+    
+             // Function to change the background color and text color
+             function changeColors() {
+                const newColor = getRandomColor();
+
+                document.body.style.backgroundColor = newColor;
+                boxElement.style.color = newColor;
+                tweetQuoteLink.style.backgroundColor = newColor;
+                tumblrQuoteLink.style.backgroundColor = newColor;
+                newQuoteButton.style.backgroundColor = newColor;
+            }
+    
+            function handleNewQuote() {
+                fetchQuote();
+                changeColors();
+            }
+    
+            function tweetQuote() {
+                const twitterUrl = `https://twitter.com/intent/tweet?text="${quote}" - ${author}`;
+                window.open(twitterUrl, '_blank');
+            }
+
+            function tumblrQuote() {
+                // Placeholder link, you'll need to replace it with the actual Tumblr post link
+                window.open('https://www.tumblr.com/', '_blank');
+            }
+    
+            newQuoteButton.addEventListener('click', handleNewQuote);
+            tweetQuoteLink.addEventListener('click', tweetQuote);
+            tumblrQuoteLink.addEventListener('click', tumblrQuote);
+
+        });
+    </script>
+
+    <!-- FREE CODE CAMP TESTING SCRIPT -->
+    <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+</body>
+</html>
