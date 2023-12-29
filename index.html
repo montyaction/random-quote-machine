@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,500">
     <title>Random Quote Machine</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
-        @import url('https://fonts.googleapis.com/css?family=Raleway:400,500');
-
         *{
             margin: 0;
             padding: 0;
@@ -37,17 +35,23 @@
             background-color: #fff;
             border-radius: 3px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            padding: 40px 50px;
+            padding: 40px 20px; /* Adjusted padding for smaller screens */
             text-align: center;
-            max-width: 450px;
+            width: 100%; /*Make's sure it's full width on smaller screen*/
+            transition: padding 0.5s, width 0.5s; /* Added transition for padding and width */
+        }
+
+        #quote-box .quote-text,
+        #quote-box .quote-author {
+            max-width: 100%; /* Take full width on smaller screens */
         }
 
         #quote-box .quote-text {
-            width: 450px;
             height: auto;
             clear: both;
+            font-size: 1.5em;
             font-weight: 500;
-            font-size: 1.75em;
+            transition: font-size 0.5s; /* Added transition for font size */
         }
 
         #quote-box .quote-text i {
@@ -56,22 +60,24 @@
         }
 
         #quote-box .quote-author {
-            max-width: 450px;
             height: auto;
             clear: both;
             padding: 20px 0;
             font-size: 1em;
             text-align: right;
+            transition: padding 0.5s; /* Added transition for padding */
         }
 
         .buttons {
-            display: block;
-            max-width: 450px;
+            max-width: 100%; /* Take full width on smaller screens */
+            display: flex; /* Stack buttons vertically on smaller screens */
+            flex-direction: column;
             margin: auto;
         }
 
         .button {
             height: 38px;
+            margin-top: 10px; /* Add spacing between buttons on smaller screen */
             background-color: #333;
             color: #fff;
             padding: 8px 18px 6px 18px;
@@ -84,28 +90,53 @@
             border-radius: 3px;
             outline: none;
             opacity: 1;
+            transition: background-color 0.5s; /* Added transition for background-color */
         }
 
         .button:hover {
             opacity: 0.9;
         }
 
-        .button:nth-child(1) {
-            margin-right: 5px;
-        }
-
         #tweet-quote,  #tumblr-quote {
-            float: left;
+            float: none;
+            width: 100%;
             height: 30px;
-            width: 40px;
             font-size: 1.2em;
             text-align: center;
             padding: 0px;
             padding-top: 10px;
+            transition: float 0.5s, width 0.5s; /* Added transition for float and width */
         }
 
-        #new-quote {
-            float: right;
+
+         /* Media Queries */
+         @media screen and (min-width: 600px) {
+            #quote-box {
+                max-width: 450px;
+                padding: 40px 50px;
+            }
+            #quote-box .quote-text,
+            #quote-box .quote-author {
+                max-width: 450px;
+            }
+            #quote-box .quote-text {
+                font-size: 1.75em;
+            }
+            #quote-box .buttons {
+                display: block;
+                max-width: 450px;
+                margin: auto;
+            }
+            #quote-box .buttons .button:nth-child(1) {
+                margin-right: 5px;
+            }
+            #tweet-quote,  #tumblr-quote {
+                float: left;
+                width: 40px;
+            }
+            #new-quote {
+                float: right;
+            }
         }
     </style>
 </head>
