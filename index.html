@@ -46,6 +46,11 @@
             max-width: 100%; /* Take full width on smaller screens */
         }
 
+        .fade-out {
+            opacity: 0; /* Start with zero opacity */
+            transition: opacity 0.5s;
+        }
+
         #quote-box .quote-text {
             height: auto;
             clear: both;
@@ -160,50 +165,72 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-
+            
             const boxElement = document.getElementById('quote-box');
             const quoteElement = document.getElementById('text');
             const authorElement = document.getElementById('author');
             const tweetQuoteLink = document.getElementById('tweet-quote');
             const tumblrQuoteLink = document.getElementById('tumblr-quote');
             const newQuoteButton = document.getElementById('new-quote');
+            
+            let quotesData;
 
-            let quote = '';
-            let author = '';
+            var colors = [
+                '#16a085',
+                '#27ae60',
+                '#2c3e50',
+                '#f39c12',
+                '#e74c3c',
+                '#9b59b6',
+                '#FB6964',
+                '#342224',
+                '#472E32',
+                '#BDBB99',
+                '#77B1A9',
+                '#73A857'
+            ];
 
-            document.addEventListener('DOMContentLoaded', fetchQuote);
+            let quote = '', author = '';
 
-            // Fetch a new quote and update the interface
-            async function fetchQuote() {
+            async function getQuotes() {
                 try {
-                    const response = await fetch('https://api.quotable.io/random');
-                    const data = await response.json();
-                    setQuoteAndAuthor(data.content, data.author);
+                    const response = await fetch('https://api.quotable.io/quotes');
+                    quotesData = await response.json();
+                    console.log('quotesData', quotesData.results);
                 } catch (error) {
-                    console.log("Error fetching quote: ", error);
+                    console.log("Error fetching quote list: ", error);
                 }
             }
+
+            function getRandomQuote() {
+                return quotesData.results[
+                    Math.floor(Math.random() * quotesData.results.length)
+                ];
+            }
             
-            // 
-            function setQuoteAndAuthor(newQuote, newAuthor) {
-                quote = newQuote;
-                author = newAuthor;
+            getQuotes().then(() => {
+                getQuote();
+                changeColors();
+            });
+            
+            function getQuote() {
+                let randomQuote = getRandomQuote();
+                quote = randomQuote.content;
+                author = randomQuote.author;
+
                 quoteElement.textContent = quote;
                 authorElement.textContent = author;
             }
 
             // Function to generate a random color
             function getRandomColor() {
-                var letters = '0123456789ABCDEF';
-                var color = '#';
-                for (var i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
-                }
-                return color;
+                return colors[
+                    Math.floor(Math.random() * colors.length)
+                ];
             }
     
-             // Function to change the background color and text color
-             function changeColors() {
+            // Function to change the background color and text color
+            function changeColors() {
                 const newColor = getRandomColor();
 
                 document.body.style.backgroundColor = newColor;
@@ -214,7 +241,7 @@
             }
     
             function handleNewQuote() {
-                fetchQuote();
+                getQuote();
                 changeColors();
             }
     
