@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,12 +8,13 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,500">
     <title>Random Quote Machine</title>
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
             list-style: none;
             vertical-align: baseline;
         }
+
         body {
             background-color: #333;
             color: #333;
@@ -24,7 +26,7 @@
             justify-content: center;
             height: 100vh;
         }
-        
+
         div {
             position: relative;
             z-index: 2;
@@ -49,16 +51,20 @@
             background-color: #fff;
             border-radius: 3px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            padding: 40px 20px; /* Adjusted padding for smaller screens */
+            padding: 40px 20px;
+            /* Adjusted padding for smaller screens */
             text-align: center;
-            width: 100%; /*Make's sure it's full width on smaller screen*/
-            transition: padding 0.5s, width 0.5s; /* Added transition for padding and width */
+            width: 100%;
+            /*Make's sure it's full width on smaller screen*/
+            transition: padding 0.5s, width 0.5s;
+            /* Added transition for padding and width */
         }
 
         #footer,
         #quote-box .quote-text,
         #quote-box .quote-author {
-            max-width: 100%; /* Take full width on smaller screens */
+            max-width: 100%;
+            /* Take full width on smaller screens */
         }
 
         #quote-box .quote-text {
@@ -66,7 +72,8 @@
             clear: both;
             font-size: 1.5em;
             font-weight: 500;
-            transition: font-size 0.5s; /* Added transition for font size */
+            transition: font-size 0.5s;
+            /* Added transition for font size */
         }
 
         #quote-box .quote-text i {
@@ -83,18 +90,21 @@
         }
 
         .buttons {
-            max-width: 100%; /* Take full width on smaller screens */
-            display: flex; /* Stack buttons vertically on smaller screens */
+            max-width: 100%;
+            /* Take full width on smaller screens */
+            display: flex;
+            /* Stack buttons vertically on smaller screens */
             flex-direction: column;
             margin: auto;
             position: relative;
         }
-        
+
         .button {
             height: 38px;
             background-color: #333;
             color: #fff;
-            margin-top: 10px; /* Add spacing between buttons on smaller screen */
+            margin-top: 10px;
+            /* Add spacing between buttons on smaller screen */
             padding: 8px 18px 6px 18px;
             display: inline-block;
             text-align: center;
@@ -105,14 +115,16 @@
             border-radius: 3px;
             outline: none;
             opacity: 1;
-            transition: background-color 0.5s; /* Added transition for background-color */
+            transition: background-color 0.5s;
+            /* Added transition for background-color */
         }
 
         .button:hover {
             opacity: 0.9;
         }
 
-        #tweet-quote,  #tumblr-quote {
+        #tweet-quote,
+        #tumblr-quote {
             float: none;
             width: 100%;
             height: 28px;
@@ -120,47 +132,57 @@
             text-align: center;
             padding: 0px;
             padding-top: 10px;
-            transition: float 0.5s, width 0.5s; /* Added transition for float and width */
+            transition: float 0.5s, width 0.5s;
+            /* Added transition for float and width */
         }
 
 
-         /* Media Queries */
-         @media screen and (min-width: 600px) {
+        /* Media Queries */
+        @media screen and (min-width: 600px) {
             #quote-box {
                 max-width: 450px;
                 padding: 40px 50px;
             }
+
             #footer,
             #quote-box .quote-text,
             #quote-box .quote-author {
                 max-width: 450px;
             }
+
             #quote-box .quote-text {
                 font-size: 1.75em;
             }
+
             #quote-box .buttons {
                 display: block;
                 max-width: 450px;
                 margin: auto;
             }
+
             #quote-box .buttons .button {
                 margin-top: 0;
             }
+
             #quote-box .buttons .button:nth-child(1) {
                 margin-right: 5px;
             }
-            #tweet-quote,  #tumblr-quote {
+
+            #tweet-quote,
+            #tumblr-quote {
                 float: left;
                 width: 40px;
             }
+
             #new-quote {
                 float: right;
             }
         }
     </style>
 </head>
+
 <body>
-    
+
     <div id="wrapper">
         <div id="quote-box">
             <div class="quote-text">
@@ -171,10 +193,10 @@
             </div>
             <div class="buttons">
                 <a class="button" id="tweet-quote" title="Tweet this quote!" target="_top">
-                        <i class="fa fa-twitter"></i>
+                    <i class="fa fa-twitter"></i>
                 </a>
                 <a class="button" id="tumblr-quote" title="Post this quote on tumblr!" target="_blank">
-                        <i class="fa fa-tumblr"></i>
+                    <i class="fa fa-tumblr"></i>
                 </a>
                 <button class="button" id="new-quote"><b>New Quote</b></button>
             </div>
@@ -185,139 +207,105 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
     <script>
-        $(document).ready(function () {
-            // DOM element references
-            const boxElement = $('#quote-box');
-            const quoteTextElement = $('#text');
-            const quoteAuthorElement = $('#author');
-            const tweetQuoteLink = $('#tweet-quote');
-            const tumblrQuoteLink = $('#tumblr-quote');
-            const newQuoteButton = $('#new-quote');
-            
-            // Variable
-            let quotesData;
-            var colors = [
-                '#16a085',
-                '#27ae60',
-                '#2c3e50',
-                '#f39c12',
-                '#e74c3c',
-                '#9b59b6',
-                '#FB6964',
-                '#342224',
-                '#472E32',
-                '#BDBB99',
-                '#77B1A9',
-                '#73A857'
-            ];
-            let quote = '', author = '';
-            
-            // Function to fetch quotes asynchronously
-            async function getQuotes() {
-                try {
-                    const response = await $.ajax({
-                        url: 'https://api.quotable.io/quotes',
-                        method: 'GET',
-                        dataType: 'json'
-                    });
-                    quotesData = response;
-                } catch (error) {
-                    console.log("Error fetching quote list: ", error);
+        // Variable
+        let quotesData;
+        var colors = [
+            '#16a085',
+            '#27ae60',
+            '#2c3e50',
+            '#f39c12',
+            '#e74c3c',
+            '#9b59b6',
+            '#FB6964',
+            '#342224',
+            '#472E32',
+            '#BDBB99',
+            '#77B1A9',
+            '#73A857'
+        ];
+        let quote = '', author = '';
+
+        // Function to fetch quotes asynchronously
+        async function getQuotes() {
+            return $.ajax({
+                headers: { Accept: 'application/json' },
+                url: 'https://api.quotable.io/quotes',
+                success: function (jsonQuotes) {
+                    quotesData = jsonQuotes;
+                    console.log('QuotesData', quotesData);
                 }
-            }
-            
-            // Function to get a random quote from the quotes data array
-            function getRandomQuote() {
-                return quotesData.results[
-                    Math.floor(Math.random() * quotesData.results.length)
-                ];
-            }
-            
-            // Function to the upgate the display quote
-            function getQuote() {
-                const randomQuote = getRandomQuote();
-                quote = randomQuote.content;
-                author = randomQuote.author;
-                
-                $('.quote-text').animate({ opacity: 0 }, 500, function () {
-                    $(this).animate({ opacity: 1 }, 500);
-                    $(quoteTextElement).text(quote);
-                });
+            });
+        }
 
-                $('.quote-author').animate({ opacity: 0 }, 500, function () {
-                    $(this).animate({ opacity: 1 }, 500);
-                    $(quoteAuthorElement).html(author);
-                });
+        // Function to get a random quote from the quotes data array
+        function getRandomQuote() {
+            return quotesData.results[
+                Math.floor(Math.random() * quotesData.results.length)
+            ];
+        }
 
-                changeColors();
-                tweetQuote();
-                tumblrQuote();
-            }
+        // Function to the upgate the display quote
+        function getQuote() {
+            let randomQuote = getRandomQuote();
 
-            function fadeInOut(element, text, duration) {
-                element.style.opacity = 0;
-                setTimeout(function () {
-                    element.style.opacity = 1;
-                    element.innerHTML = text;
-                }, duration / 2);
-            }
-            
-            // Function to get a random color from the colors array
-            function getRandomColor() {
-                return colors[
-                    Math.floor(Math.random() * colors.length)
-                ];
-            }
-            
-            // Function to change colors of elements
-            function changeColors() {
-                const newColor = getRandomColor();
-                
-                $('body').css('background-color', newColor);
-                boxElement.css('color', newColor);
-                tweetQuoteLink.css('background-color', newColor);
-                tumblrQuoteLink.css('background-color', newColor);
-                newQuoteButton.css('background-color', newColor);
-            }
+            quote = randomQuote.content;
+            author = randomQuote.author;
 
-            // Event handler for tweeting the quote
-            function tweetQuote() {
-                // Set the attribute for tweeting the quote
-                tweetQuoteLink.attr(
-                    'href',
-                    'https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text=' +
+            $('#tweet-quote').attr(
+                'href',
+                'https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text=' +
                 encodeURIComponent('"' + quote + '" ' + author)
-                );
-            }
+            );
 
-            // Event handler for sharing the quote on Tumblr
-            function tumblrQuote() {
-                // Set the attribute for sharing the quote on Tumblr
-                tumblrQuoteLink.attr(
-                    'href',
-                    'https://www.tumblr.com/widgets/share/tool?posttype=quote&tags=quotes,freecodecamp&caption=' +
-                    encodeURIComponent(author) +
-                    '&content=' +
-                    encodeURIComponent(quote) +
-                    '&canonicalUrl=https%3A%2F%2Fwww.tumblr.com%2Fbuttons&shareSource=tumblr_share_button'
-                );
-            }
+            $('#tumblr-quote').attr(
+                'href',
+                'https://www.tumblr.com/widgets/share/tool?posttype=quote&tags=quotes,freecodecamp&caption=' +
+                encodeURIComponent(author) +
+                '&content=' +
+                encodeURIComponent(quote) +
+                '&canonicalUrl=https%3A%2F%2Fwww.tumblr.com%2Fbuttons&shareSource=tumblr_share_button'
+            );
 
-            // Event listeners
-            newQuoteButton.on('click', getQuote);
-            
-            // Initialize the page
+            $('.quote-text').animate({ opacity: 0 }, 500, function () {
+                $(this).animate({ opacity: 1 }, 500);
+                $('#text').text(quote);
+            });
+
+            $('.quote-author').animate({ opacity: 0 }, 500, function () {
+                $(this).animate({ opacity: 1 }, 500);
+                $('#author').html(author);
+            });
+
+            let color = Math.floor(Math.random() * colors.length);
+            $('html body').animate(
+                {
+                    backgroundColor: colors[color],
+                    color: colors[color]
+                },
+                1000
+            );
+            $('.button').animate(
+                {
+                    backgroundColor: colors[color]
+                },
+                1000
+            );
+        }
+
+        // Initialize the page
+        $(document).ready(function () {
             getQuotes().then(() => {
                 getQuote();
-                changeColors();
-                tweetQuote();
-                tumblrQuote();
             });
+            // Event listeners
+            $('#new-quote').on('click', getQuote);
         });
     </script>
 
     <!-- FREE CODE CAMP TESTING SCRIPT -->
     <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
 </body>
+
 </html>
